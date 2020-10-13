@@ -1,64 +1,70 @@
 import React from 'react'
-import { Layout, Menu } from 'antd';
+import { Layout } from 'antd'
+import { Route, Switch } from 'react-router-dom'
+import { routes } from '@/router/routes'
+import { TransitionGroup, CSSTransition } from 'react-transition-group' // 过度
 import './index.css'
+import Sidmenu from './Sidmenu'
 import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
-  UploadOutlined,
-} from '@ant-design/icons';
+} from '@ant-design/icons'
 
-const { Header, Sider, Content } = Layout;
+const { Header, Content } = Layout
 
 class Index extends React.Component {
   state = {
     collapsed: false,
-  };
+    menuSelected: this.props.history.location.pathname,
+  }
 
   toggle = () => {
     this.setState({
       collapsed: !this.state.collapsed,
-    });
-  };
+    })
+  }
 
-  render () {
+  render() {
+    // const menuSelected = this.props.history.location.pathname; // 当前页面的path
+    // const menuOpened = `/${menuSelected.split('/')[1]}`;
+    // const type = this.props.theme.type;
     return (
-      <Layout>
-        <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
-          <div className="logo" />
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
-            <Menu.Item key="1" icon={<UserOutlined />}>
-              nav 1
-            </Menu.Item>
-            <Menu.Item key="2" icon={<VideoCameraOutlined />}>
-              nav 2
-            </Menu.Item>
-            <Menu.Item key="3" icon={<UploadOutlined />}>
-              nav 3
-            </Menu.Item>
-          </Menu>
-        </Sider>
+      <Layout className="lay_height">
+        <Sidmenu tog={this.state.collapsed} />
         <Layout className="site-layout">
           <Header className="site-layout-background" style={{ padding: 0 }}>
-            {React.createElement(this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
-              className: 'trigger',
-              onClick: this.toggle,
-            })}
+            {React.createElement(
+              this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
+              {
+                className: 'trigger',
+                onClick: this.toggle,
+              }
+            )}
           </Header>
-          <Content
-            className="site-layout-background"
-            style={{
-              margin: '24px 16px',
-              padding: 24,
-              minHeight: 280,
-            }}
-          >
-            Content
-          </Content>
+          <TransitionGroup>
+            <CSSTransition classNames="fade" timeout={500}>
+              <Content
+                className="site-layout-background"
+                style={{
+                  margin: '24px 16px',
+                  padding: 24
+                }}
+              >
+                <Switch>
+                  {routes.map((e) => (
+                    <Route
+                      render={() => <e.component />}
+                      key={e.path}
+                      path={e.path}
+                    />
+                  ))}
+                </Switch>
+              </Content>
+            </CSSTransition>
+          </TransitionGroup>
         </Layout>
       </Layout>
-    );
+    )
   }
 }
-export default Index;
+export default Index
