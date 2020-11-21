@@ -1,21 +1,16 @@
 import React from 'react'
 import { Layout } from 'antd'
-import { Route, Switch } from 'react-router-dom'
-import { routes } from '@/router/routes'
-import { TransitionGroup, CSSTransition } from 'react-transition-group' // 过度
-import './index.css'
 import Sidmenu from './Sidmenu'
-import {
-  MenuUnfoldOutlined,
-  MenuFoldOutlined,
-} from '@ant-design/icons'
-
-const { Header, Content } = Layout
+import Headerdemo from './Headerdemo'
+import Contentdemo from './Contentdemo'
+import Breaddemo from './Breaddemo'
+import Tags from './tags'
 
 class Index extends React.Component {
   state = {
     collapsed: false,
     menuSelected: this.props.history.location.pathname,
+    breadName: '',
   }
 
   toggle = () => {
@@ -25,43 +20,25 @@ class Index extends React.Component {
   }
 
   render() {
-    // const menuSelected = this.props.history.location.pathname; // 当前页面的path
     // const menuOpened = `/${menuSelected.split('/')[1]}`;
     // const type = this.props.theme.type;
     return (
       <Layout className="lay_height">
+        {/* 左侧导航栏 */}
         <Sidmenu tog={this.state.collapsed} />
         <Layout className="site-layout">
-          <Header className="site-layout-background" style={{ padding: 0 }}>
-            {React.createElement(
-              this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
-              {
-                className: 'trigger',
-                onClick: this.toggle,
-              }
-            )}
-          </Header>
-          <TransitionGroup>
-            <CSSTransition classNames="fade" timeout={500}>
-              <Content
-                className="site-layout-background"
-                style={{
-                  margin: '24px 16px',
-                  padding: 24
-                }}
-              >
-                <Switch>
-                  {routes.map((e) => (
-                    <Route
-                      render={() => <e.component />}
-                      key={e.path}
-                      path={e.path}
-                    />
-                  ))}
-                </Switch>
-              </Content>
-            </CSSTransition>
-          </TransitionGroup>
+          {/* 头部 */}
+          <Headerdemo
+            colloff={this.state.collapsed}
+            toggle={this.toggle}
+            history={this.props.history}
+          />
+          {/* 页签 */}
+          <Tags />
+          {/* 面包屑 */}
+          <Breaddemo pathName={this.state.menuSelected} />
+          {/* 内容 */}
+          <Contentdemo />
         </Layout>
       </Layout>
     )

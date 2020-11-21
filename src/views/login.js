@@ -1,6 +1,9 @@
 import React from 'react'
+// import $axios from 'axios'
 import './login.css'
+// import api from '@/axios/api'
 import { Form, Input, Button, Checkbox } from 'antd'
+
 class Login extends React.Component {
   state = {
     formRef: React.createRef(),
@@ -8,12 +11,18 @@ class Login extends React.Component {
   // 登录判断验证码
   onFill = () => {
     let user = this.state.formRef.current.getFieldsValue() // 获取form组件的值
-    if (user.username === '123') {
-      if (user.password === '123') {
-        sessionStorage.setItem('userName', JSON.stringify(user))
-        this.props.history.push('/main') // 路由跳转
-      }
+    if(user.username === 'admin' && user.password === 'admin'){
+      sessionStorage.setItem('userName', JSON.stringify(user))
+      this.props.history.push('/main')
     }
+    // api.login({ workerNo: user.username, psw: user.password })
+    // .then(res => {
+    //   if(res.data.result){
+    //     console.log('登录成功')
+    //     sessionStorage.setItem('userName', JSON.stringify(user))
+    //     this.props.history.push('/main') // 跳转到主页
+    //   }
+    // })
   }
   render() {
     // 登录组件
@@ -25,10 +34,10 @@ class Login extends React.Component {
       },
     }
     const onFinish = (values) => {
-      console.log('Success', values)
+      // console.log('Success', values)
     }
     const onFinishFailed = (errorInfo) => {
-      console.log('Failed', errorInfo)
+      // console.log('Failed', errorInfo)
     }
     return (
       <div className="login_sty">

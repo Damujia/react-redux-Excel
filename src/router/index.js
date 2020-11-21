@@ -1,6 +1,6 @@
 import React from 'react'
 import { HashRouter, Route, Switch } from 'react-router-dom'
-import Index from '@/views/layouts/index';
+import Index from '@/views/layouts/index.js';
 import Login from '@/views/login.js';
 import AuthRouter from '@/views/auth/AuthRouter';
 const Router = () => {
